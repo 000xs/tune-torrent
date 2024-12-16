@@ -18,11 +18,12 @@ export default function SpotifyTrackInfo() {
     try {
       const response = await axios.post("/api/track", {
         key: "free", // Your API key
-        url: "https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV?si=99a1f203f9f046cf", // Your track URL
+        url: url,
       });
 
       console.log(response.data);
       setTrackInfo(response.data);
+      window.open(response.data.url, "_blank");
     } catch (err) {
       console.error(err);
       setError(
@@ -32,21 +33,22 @@ export default function SpotifyTrackInfo() {
       setLoading(false);
     }
   };
-  const  handlerDownload = async()=> {
+  const handlerDownload = async () => {
     try {
-
-      const response = await axios.get('/api/download', { responseType: 'blob' });
+      const response = await axios.get("/api/download", {
+        responseType: "blob",
+      });
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', 'yourfile.pdf'); // Specify the name for the downloaded file
+      link.setAttribute("download", "yourfile.pdf"); // Specify the name for the downloaded file
       document.body.appendChild(link);
       link.click();
       link.remove();
     } catch (error) {
-      console.error('Download failed:', error);
+      console.error("Download failed:", error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-spotify-black text-spotify-white p-8">
